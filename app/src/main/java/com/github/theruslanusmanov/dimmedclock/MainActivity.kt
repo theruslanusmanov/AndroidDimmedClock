@@ -1,6 +1,7 @@
 package com.github.theruslanusmanov.dimmedclock
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextClock
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,10 +18,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.theruslanusmanov.dimmedclock.ui.theme.DimmedClockTheme
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class MainActivity : ComponentActivity() {
+    val BASE_URL = "https://api.open-meteo.com/v1/"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(this.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        val service: WeatherService = retrofit.create(WeatherService::class.java)
+        val tmp = service.loadTemperature()
+        tmp.enqueue(object : Callback<Any?> {
+            override fun onResponse(call: Call<Any?>, response: Response<Any?>) {
+                Log.d("TMP", response.body().toString())
+            }
+
+            override fun onFailure(call: Call<Any?>, t: Throwable) {
+                // Log error here since request failed
+            }
+        })
+
         setContent {
             DimmedClockTheme {
                 // A surface container using the 'background' color from the theme
