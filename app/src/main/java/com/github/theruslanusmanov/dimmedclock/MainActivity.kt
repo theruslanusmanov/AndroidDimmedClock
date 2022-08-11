@@ -94,7 +94,7 @@ fun Clock() {
 @Composable
 fun Temperature(temperature: String) {
     Text(
-        text = "$temperature°",
+        text = "$temperature°C",
         color = Color.White,
         style = MaterialTheme.typography.h2,
     )
