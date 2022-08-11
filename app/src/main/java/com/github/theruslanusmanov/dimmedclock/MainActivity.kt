@@ -53,21 +53,25 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             DimmedClockTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Black
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Clock()
-                        Temperature(temperature)
-                    }
+                    DimmedClock(temperature)
                 }
             }
         }
+    }
+}
+
+@Composable
+fun DimmedClock(temperature: String) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Clock()
+        Temperature(temperature)
     }
 }
 
@@ -96,10 +100,10 @@ fun Temperature(temperature: String) {
     )
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 fun DefaultPreview() {
     DimmedClockTheme {
-        Clock()
+        DimmedClock("25")
     }
 }
